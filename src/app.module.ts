@@ -1,10 +1,20 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller';
-import { AppService } from './app.service';
+import { AppController } from './controllers';
+import { AppService } from './services';
+import { TypeOrmModule } from '@nestjs/typeorm';
+import { EventsGateway } from './socket';
+import { DB_CONFIG } from "./configs";
+import { DbStorage } from "./storages";
 
 @Module({
-  imports: [],
+  imports: [TypeOrmModule.forRoot({
+    type: 'mysql',
+    ...DB_CONFIG,
+    entities: [],
+})],
   controllers: [AppController],
-  providers: [AppService],
+  providers: [AppService, EventsGateway, DbStorage],
 })
-export class AppModule {}
+export class AppModule {
+  constructor () {}
+}
